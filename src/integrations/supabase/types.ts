@@ -14,7 +14,125 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          created_at: string
+          id: string
+          parts: Json
+          role: string
+          thread_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          parts?: Json
+          role: string
+          thread_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          parts?: Json
+          role?: string
+          thread_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "chat_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_threads: {
+        Row: {
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      materials: {
+        Row: {
+          class_level: number
+          created_at: string
+          description: string
+          duration_minutes: number | null
+          id: string
+          kind: string
+          subject: string
+          title: string
+          url: string
+        }
+        Insert: {
+          class_level: number
+          created_at?: string
+          description?: string
+          duration_minutes?: number | null
+          id?: string
+          kind: string
+          subject: string
+          title: string
+          url: string
+        }
+        Update: {
+          class_level?: number
+          created_at?: string
+          description?: string
+          duration_minutes?: number | null
+          id?: string
+          kind?: string
+          subject?: string
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          class_level: number | null
+          created_at: string
+          full_name: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          class_level?: number | null
+          created_at?: string
+          full_name?: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          class_level?: number | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
