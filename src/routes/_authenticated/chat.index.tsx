@@ -27,10 +27,11 @@ function ChatEntry() {
         .order("updated_at", { ascending: false })
         .limit(1);
 
-      if (existing && existing.length > 0) {
+      const latest = existing?.[0];
+      if (latest) {
         navigate({
           to: "/chat/$threadId",
-          params: { threadId: existing[0].id },
+          params: { threadId: latest.id },
           replace: true,
         });
         return;
