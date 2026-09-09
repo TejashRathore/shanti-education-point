@@ -105,8 +105,9 @@ function ChatPage() {
     const remaining = (threadsQuery.data ?? []).filter((t) => t.id !== id);
     await queryClient.invalidateQueries({ queryKey: ["chat-threads"] });
     if (id === threadId) {
-      if (remaining.length > 0) {
-        navigate({ to: "/chat/$threadId", params: { threadId: remaining[0].id } });
+      const next = remaining[0];
+      if (next) {
+        navigate({ to: "/chat/$threadId", params: { threadId: next.id } });
       } else {
         navigate({ to: "/chat" });
       }
@@ -201,7 +202,7 @@ function ChatWindow({
         thread_id: threadId,
         user_id: userData.user.id,
         role: message.role,
-        parts: message.parts,
+        parts: JSON.parse(JSON.stringify(message.parts)),
       });
       if (error) {
         savedIds.current.delete(message.id);
