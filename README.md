@@ -1,14 +1,18 @@
-# Welcome to your Lovable project
+# Shanti Study Hub
+
+build a website of name shanti education that contains pdfs and videos for the students and and also a chat bot for students so they can access it whenever there is some problem or any kind of solution problem the chat bot have to be very accurate and precise to solve complex math problems and give appropriate answers to the question of any kind
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://shanti-learing-hub.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/44ac45a5-7dda-4574-ad7b-e8b7fa9e59cf).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +24,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
