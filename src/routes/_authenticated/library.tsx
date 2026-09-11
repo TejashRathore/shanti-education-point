@@ -1,11 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { FileText, PlayCircle, ExternalLink, Clock } from "lucide-react";
+import {
+  FileText,
+  PlayCircle,
+  ExternalLink,
+  Clock,
+  CheckCircle2,
+  Star,
+  Send,
+} from "lucide-react";
+import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 
@@ -71,6 +81,28 @@ function Library() {
         .order("subject");
       if (error) throw error;
       return data as Material[];
+    },
+  });
+
+  const progressQuery = useQuery({
+    queryKey: ["my-progress"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("study_progress")
+        .select("material_id, status");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const reviewsQuery = useQuery({
+    queryKey: ["all-reviews"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("material_reviews")
+        .select("material_id, rating, user_id");
+      if (error) throw error;
+      return data;
     },
   });
 
@@ -157,12 +189,90 @@ function Library() {
         </p>
       ) : (
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((m) => (
-            <MaterialCard key={m.id} material={m} />
-          ))}
+          {items.map((m) => {
+            const mine = (reviewsQuery.data ?? []).filter((r) => r.material_id === m.id);
+            const avg = mine.length
+              ? mine.reduce((a, r) => a + r.rating, 0) / mine.length
+              : null;
+            return (
+              <MaterialCard
+                key={m.id}
+                material={m}
+                done={(progressQuery.data ?? []).some(
+                  (p) => p.material_id === m.id && p.status === "completed",
+                )}
+                averageRating={avg}
+                reviewCount={mine.length}
+              />
+            );
+          })}
         </div>
       )}
+
+      <FeedbackBox />
     </div>
+  );
+}
+
+function FeedbackBox() {
+  const [message, setMessage] = useState("");
+  const [category, setCategory] = useState("general");
+
+  const send = useMutation({
+    mutationFn: async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Please sign in again.");
+      if (!message.trim()) throw new Error("Please write a short message first.");
+      const { error } = await supabase
+        .from("feedback")
+        .insert({ user_id: userData.user.id, category, message: message.trim() });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      setMessage("");
+      toast.success("Thank you! Your message has reached your teachers.");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  return (
+    <section className="surface-panel mt-14 max-w-2xl p-6">
+      <h2 className="text-lg font-semibold">Tell us what you need</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Missing a chapter? Something confusing? Write to your teachers here.
+      </p>
+      <div className="mt-4 grid gap-3">
+        <div className="flex flex-wrap gap-2">
+          {[
+            { id: "general", label: "General" },
+            { id: "request", label: "Please add this topic" },
+            { id: "problem", label: "Something is broken" },
+          ].map((c) => (
+            <Button
+              key={c.id}
+              size="sm"
+              variant={category === c.id ? "secondary" : "ghost"}
+              onClick={() => setCategory(c.id)}
+            >
+              {c.label}
+            </Button>
+          ))}
+        </div>
+        <Textarea
+          rows={3}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Write your message here..."
+        />
+        <Button
+          className="self-start"
+          onClick={() => send.mutate()}
+          disabled={send.isPending}
+        >
+          <Send className="size-4" /> Send to teachers
+        </Button>
+      </div>
+    </section>
   );
 }
 
@@ -171,8 +281,88 @@ function youtubeId(url: string) {
   return match?.[1] ?? null;
 }
 
-function MaterialCard({ material }: { material: Material }) {
+function MaterialCard({
+  material,
+  done,
+  averageRating,
+  reviewCount,
+}: {
+  material: Material;
+  done: boolean;
+  averageRating: number | null;
+  reviewCount: number;
+}) {
   const videoId = material.kind === "video" ? youtubeId(material.url) : null;
+  const queryClient = useQueryClient();
+  const [hovered, setHovered] = useState(0);
+
+  const markDone = useMutation({
+    mutationFn: async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Please sign in again.");
+      const { data: existing } = await supabase
+        .from("study_progress")
+        .select("id")
+        .eq("material_id", material.id)
+        .eq("user_id", userData.user.id)
+        .maybeSingle();
+      const status = done ? "opened" : "completed";
+      if (existing) {
+        const { error } = await supabase
+          .from("study_progress")
+          .update({ status })
+          .eq("id", existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("study_progress").insert({
+          user_id: userData.user.id,
+          material_id: material.id,
+          status,
+          minutes_spent: material.duration_minutes ?? 0,
+        });
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-progress"] });
+      if (!done) toast.success("Well done! Keep going. 🎉");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  const rate = useMutation({
+    mutationFn: async (rating: number) => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Please sign in again.");
+      const { data: existing } = await supabase
+        .from("material_reviews")
+        .select("id")
+        .eq("material_id", material.id)
+        .eq("user_id", userData.user.id)
+        .maybeSingle();
+      if (existing) {
+        const { error } = await supabase
+          .from("material_reviews")
+          .update({ rating })
+          .eq("id", existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("material_reviews").insert({
+          user_id: userData.user.id,
+          material_id: material.id,
+          rating,
+          comment: "",
+        });
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-reviews"] });
+      toast.success("Thanks for rating this lesson!");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
 
   return (
     <article className="surface-panel flex flex-col overflow-hidden">
@@ -208,17 +398,56 @@ function MaterialCard({ material }: { material: Material }) {
         <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
           {material.description}
         </p>
-        <Button asChild variant="outline" size="sm" className="mt-4 self-start">
-          <a href={material.url} target="_blank" rel="noreferrer noopener">
-            {material.kind === "pdf" ? (
-              <FileText className="size-4" />
-            ) : (
-              <PlayCircle className="size-4" />
-            )}
-            {material.kind === "pdf" ? "Open PDF" : "Watch on YouTube"}
-            <ExternalLink className="size-3.5" />
-          </a>
-        </Button>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <Button asChild variant="outline" size="sm">
+            <a href={material.url} target="_blank" rel="noreferrer noopener">
+              {material.kind === "pdf" ? (
+                <FileText className="size-4" />
+              ) : (
+                <PlayCircle className="size-4" />
+              )}
+              {material.kind === "pdf" ? "Open PDF" : "Watch on YouTube"}
+              <ExternalLink className="size-3.5" />
+            </a>
+          </Button>
+          <Button
+            size="sm"
+            variant={done ? "secondary" : "ghost"}
+            onClick={() => markDone.mutate()}
+            disabled={markDone.isPending}
+          >
+            <CheckCircle2 className="size-4" />
+            {done ? "Done" : "Mark as done"}
+          </Button>
+        </div>
+
+        <div className="mt-3 flex items-center gap-2 border-t border-border/60 pt-3">
+          <span className="flex items-center gap-0.5" onMouseLeave={() => setHovered(0)}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                aria-label={`Rate ${star} out of 5`}
+                onMouseEnter={() => setHovered(star)}
+                onClick={() => rate.mutate(star)}
+                className="p-0.5 text-amber-500"
+              >
+                <Star
+                  className={`size-4 ${
+                    star <= (hovered || Math.round(averageRating ?? 0))
+                      ? "fill-current"
+                      : "text-muted-foreground"
+                  }`}
+                />
+              </button>
+            ))}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {averageRating
+              ? `${averageRating.toFixed(1)} from ${reviewCount} student${reviewCount === 1 ? "" : "s"}`
+              : "Be the first to rate"}
+          </span>
+        </div>
       </div>
     </article>
   );

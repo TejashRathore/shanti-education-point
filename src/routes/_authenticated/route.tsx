@@ -1,9 +1,10 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { BookOpen, MessageCircleQuestion, LogOut } from "lucide-react";
+import { BookOpen, MessageCircleQuestion, LogOut, ShieldCheck } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useIsAdmin } from "@/lib/use-admin";
 import logo from "@/assets/shanti-logo.png";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/_authenticated")({
 function AppShell() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isAdmin = useIsAdmin();
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
@@ -51,6 +53,14 @@ function AppShell() {
                 <span className="hidden sm:inline">AI tutor</span>
               </Link>
             </Button>
+            {isAdmin.data ? (
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/admin" activeProps={{ className: "bg-secondary" }}>
+                  <ShieldCheck className="size-4" />
+                  <span className="hidden sm:inline">Admin</span>
+                </Link>
+              </Button>
+            ) : null}
             <Button variant="ghost" size="sm" onClick={handleSignOut} aria-label="Sign out">
               <LogOut className="size-4" />
             </Button>
