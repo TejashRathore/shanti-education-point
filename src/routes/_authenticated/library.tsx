@@ -398,17 +398,56 @@ function MaterialCard({
         <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
           {material.description}
         </p>
-        <Button asChild variant="outline" size="sm" className="mt-4 self-start">
-          <a href={material.url} target="_blank" rel="noreferrer noopener">
-            {material.kind === "pdf" ? (
-              <FileText className="size-4" />
-            ) : (
-              <PlayCircle className="size-4" />
-            )}
-            {material.kind === "pdf" ? "Open PDF" : "Watch on YouTube"}
-            <ExternalLink className="size-3.5" />
-          </a>
-        </Button>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <Button asChild variant="outline" size="sm">
+            <a href={material.url} target="_blank" rel="noreferrer noopener">
+              {material.kind === "pdf" ? (
+                <FileText className="size-4" />
+              ) : (
+                <PlayCircle className="size-4" />
+              )}
+              {material.kind === "pdf" ? "Open PDF" : "Watch on YouTube"}
+              <ExternalLink className="size-3.5" />
+            </a>
+          </Button>
+          <Button
+            size="sm"
+            variant={done ? "secondary" : "ghost"}
+            onClick={() => markDone.mutate()}
+            disabled={markDone.isPending}
+          >
+            <CheckCircle2 className="size-4" />
+            {done ? "Done" : "Mark as done"}
+          </Button>
+        </div>
+
+        <div className="mt-3 flex items-center gap-2 border-t border-border/60 pt-3">
+          <span className="flex items-center gap-0.5" onMouseLeave={() => setHovered(0)}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                aria-label={`Rate ${star} out of 5`}
+                onMouseEnter={() => setHovered(star)}
+                onClick={() => rate.mutate(star)}
+                className="p-0.5 text-amber-500"
+              >
+                <Star
+                  className={`size-4 ${
+                    star <= (hovered || Math.round(averageRating ?? 0))
+                      ? "fill-current"
+                      : "text-muted-foreground"
+                  }`}
+                />
+              </button>
+            ))}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {averageRating
+              ? `${averageRating.toFixed(1)} from ${reviewCount} student${reviewCount === 1 ? "" : "s"}`
+              : "Be the first to rate"}
+          </span>
+        </div>
       </div>
     </article>
   );
