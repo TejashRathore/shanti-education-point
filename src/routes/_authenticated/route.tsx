@@ -20,6 +20,7 @@ export const Route = createFileRoute("/_authenticated")({
 function AppShell() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isAdmin = useIsAdmin();
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
