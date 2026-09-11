@@ -53,6 +53,14 @@ function AppShell() {
                 <span className="hidden sm:inline">AI tutor</span>
               </Link>
             </Button>
+            {isAdmin.data ? (
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/admin" activeProps={{ className: "bg-secondary" }}>
+                  <ShieldCheck className="size-4" />
+                  <span className="hidden sm:inline">Admin</span>
+                </Link>
+              </Button>
+            ) : null}
             <Button variant="ghost" size="sm" onClick={handleSignOut} aria-label="Sign out">
               <LogOut className="size-4" />
             </Button>
