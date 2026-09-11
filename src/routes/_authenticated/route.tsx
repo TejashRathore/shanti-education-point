@@ -1,9 +1,10 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { BookOpen, MessageCircleQuestion, LogOut } from "lucide-react";
+import { BookOpen, MessageCircleQuestion, LogOut, ShieldCheck } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useIsAdmin } from "@/lib/use-admin";
 import logo from "@/assets/shanti-logo.png";
 
 export const Route = createFileRoute("/_authenticated")({
