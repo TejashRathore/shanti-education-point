@@ -189,12 +189,90 @@ function Library() {
         </p>
       ) : (
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((m) => (
-            <MaterialCard key={m.id} material={m} />
-          ))}
+          {items.map((m) => {
+            const mine = (reviewsQuery.data ?? []).filter((r) => r.material_id === m.id);
+            const avg = mine.length
+              ? mine.reduce((a, r) => a + r.rating, 0) / mine.length
+              : null;
+            return (
+              <MaterialCard
+                key={m.id}
+                material={m}
+                done={(progressQuery.data ?? []).some(
+                  (p) => p.material_id === m.id && p.status === "completed",
+                )}
+                averageRating={avg}
+                reviewCount={mine.length}
+              />
+            );
+          })}
         </div>
       )}
+
+      <FeedbackBox />
     </div>
+  );
+}
+
+function FeedbackBox() {
+  const [message, setMessage] = useState("");
+  const [category, setCategory] = useState("general");
+
+  const send = useMutation({
+    mutationFn: async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Please sign in again.");
+      if (!message.trim()) throw new Error("Please write a short message first.");
+      const { error } = await supabase
+        .from("feedback")
+        .insert({ user_id: userData.user.id, category, message: message.trim() });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      setMessage("");
+      toast.success("Thank you! Your message has reached your teachers.");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  return (
+    <section className="surface-panel mt-14 max-w-2xl p-6">
+      <h2 className="text-lg font-semibold">Tell us what you need</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Missing a chapter? Something confusing? Write to your teachers here.
+      </p>
+      <div className="mt-4 grid gap-3">
+        <div className="flex flex-wrap gap-2">
+          {[
+            { id: "general", label: "General" },
+            { id: "request", label: "Please add this topic" },
+            { id: "problem", label: "Something is broken" },
+          ].map((c) => (
+            <Button
+              key={c.id}
+              size="sm"
+              variant={category === c.id ? "secondary" : "ghost"}
+              onClick={() => setCategory(c.id)}
+            >
+              {c.label}
+            </Button>
+          ))}
+        </div>
+        <Textarea
+          rows={3}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Write your message here..."
+        />
+        <Button
+          className="self-start"
+          onClick={() => send.mutate()}
+          disabled={send.isPending}
+        >
+          <Send className="size-4" /> Send to teachers
+        </Button>
+      </div>
+    </section>
   );
 }
 
