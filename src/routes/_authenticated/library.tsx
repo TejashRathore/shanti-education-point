@@ -281,8 +281,88 @@ function youtubeId(url: string) {
   return match?.[1] ?? null;
 }
 
-function MaterialCard({ material }: { material: Material }) {
+function MaterialCard({
+  material,
+  done,
+  averageRating,
+  reviewCount,
+}: {
+  material: Material;
+  done: boolean;
+  averageRating: number | null;
+  reviewCount: number;
+}) {
   const videoId = material.kind === "video" ? youtubeId(material.url) : null;
+  const queryClient = useQueryClient();
+  const [hovered, setHovered] = useState(0);
+
+  const markDone = useMutation({
+    mutationFn: async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Please sign in again.");
+      const { data: existing } = await supabase
+        .from("study_progress")
+        .select("id")
+        .eq("material_id", material.id)
+        .eq("user_id", userData.user.id)
+        .maybeSingle();
+      const status = done ? "opened" : "completed";
+      if (existing) {
+        const { error } = await supabase
+          .from("study_progress")
+          .update({ status })
+          .eq("id", existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("study_progress").insert({
+          user_id: userData.user.id,
+          material_id: material.id,
+          status,
+          minutes_spent: material.duration_minutes ?? 0,
+        });
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-progress"] });
+      if (!done) toast.success("Well done! Keep going. 🎉");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  const rate = useMutation({
+    mutationFn: async (rating: number) => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Please sign in again.");
+      const { data: existing } = await supabase
+        .from("material_reviews")
+        .select("id")
+        .eq("material_id", material.id)
+        .eq("user_id", userData.user.id)
+        .maybeSingle();
+      if (existing) {
+        const { error } = await supabase
+          .from("material_reviews")
+          .update({ rating })
+          .eq("id", existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("material_reviews").insert({
+          user_id: userData.user.id,
+          material_id: material.id,
+          rating,
+          comment: "",
+        });
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-reviews"] });
+      toast.success("Thanks for rating this lesson!");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
 
   return (
     <article className="surface-panel flex flex-col overflow-hidden">
