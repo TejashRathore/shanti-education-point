@@ -84,6 +84,28 @@ function Library() {
     },
   });
 
+  const progressQuery = useQuery({
+    queryKey: ["my-progress"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("study_progress")
+        .select("material_id, status");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const reviewsQuery = useQuery({
+    queryKey: ["all-reviews"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("material_reviews")
+        .select("material_id, rating, user_id");
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const activeClass = classLevel ?? profileQuery.data?.class_level ?? null;
 
   const items = useMemo(() => {
