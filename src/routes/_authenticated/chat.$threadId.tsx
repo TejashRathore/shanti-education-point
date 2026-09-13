@@ -22,18 +22,18 @@ import {
   PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
-import logo from "@/assets/shanti-logo.png";
+import logo from "@/assets/shanti-education-point-logo.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/chat/$threadId")({
   head: () => ({
     meta: [
-      { title: "AI tutor — Shanti Education" },
+      { title: "AI tutor — Shanti Education Point" },
       {
         name: "description",
         content:
-          "Ask the Shanti Education AI tutor any question and get step-by-step help with maths, science and more.",
+          "Ask the Shanti Education Point AI tutor any question and get step-by-step help with maths, science and more.",
       },
-      { property: "og:title", content: "AI tutor — Shanti Education" },
+      { property: "og:title", content: "AI tutor — Shanti Education Point" },
       {
         property: "og:description",
         content: "Step-by-step help with maths, science and every school subject.",
@@ -267,11 +267,11 @@ function ChatWindow({
           {messages.length === 0 ? (
             <div className="flex flex-col items-center py-12 text-center">
               <img
-                src={logo}
-                alt="Shanti Education tutor"
+                src={logo.url}
+                alt="Shanti Education Point tutor"
                 width={64}
                 height={64}
-                className="size-16"
+                className="h-16 w-auto"
                 loading="lazy"
               />
               <h2 className="mt-4 text-xl font-semibold">Ask me anything</h2>

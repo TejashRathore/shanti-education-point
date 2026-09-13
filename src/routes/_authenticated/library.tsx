@@ -22,13 +22,13 @@ import { Badge } from "@/components/ui/badge";
 export const Route = createFileRoute("/_authenticated/library")({
   head: () => ({
     meta: [
-      { title: "Study library — Shanti Education" },
+      { title: "Study library — Shanti Education Point" },
       {
         name: "description",
         content:
-          "Browse notes, worksheets and video lessons for class 1 to 12 in the Shanti Education study library.",
+          "Browse notes, worksheets and video lessons for class 1 to 12 in the Shanti Education Point study library.",
       },
-      { property: "og:title", content: "Study library — Shanti Education" },
+      { property: "og:title", content: "Study library — Shanti Education Point" },
       {
         property: "og:description",
         content: "Notes, worksheets and video lessons for class 1 to 12.",

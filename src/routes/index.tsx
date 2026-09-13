@@ -1,22 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BookOpen, PlayCircle, MessageCircleQuestion, GraduationCap } from "lucide-react";
+import { ArrowRight, BookOpen, PlayCircle, MessageCircleQuestion } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/shanti-logo.png";
+import logo from "@/assets/shanti-education-point-logo.png.asset.json";
 import heroImage from "@/assets/hero-students.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Shanti Education — Study Notes, Video Lessons & AI Tutor" },
+      { title: "Shanti Education Point — Study Notes & AI Tutor" },
       {
         name: "description",
         content:
-          "Shanti Education gives students of class 1 to 12 free study PDFs, video lessons and an AI tutor that solves maths and science problems step by step.",
+          "Shanti Education Point gives class 1 to 12 students study PDFs, video lessons and precise AI tutoring for every subject.",
       },
       {
         property: "og:title",
-        content: "Shanti Education — Study Notes, Video Lessons & AI Tutor",
+        content: "Shanti Education Point — Study Notes & AI Tutor",
       },
       {
         property: "og:description",
@@ -49,10 +49,10 @@ const features = [
 function Landing() {
   return (
     <div className="min-h-screen bg-background">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:py-6">
         <div className="flex items-center gap-2.5">
-          <img src={logo} alt="Shanti Education" width={40} height={40} className="size-10" />
-          <span className="font-display text-lg font-semibold">Shanti Education</span>
+          <img src={logo.url} alt="Shanti Education Point logo" width={62} height={38} className="h-10 w-auto" />
+          <span className="font-display text-sm font-semibold sm:text-lg">Shanti Education Point</span>
         </div>
         <div className="flex items-center gap-2">
           <Button asChild variant="ghost">
@@ -67,59 +67,56 @@ function Landing() {
       </header>
 
       <main>
-        <section className="hero-gradient">
-          <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-8 md:grid-cols-2 md:pb-24 md:pt-14">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-                <GraduationCap className="size-3.5" /> Class 1 to Class 12
-              </span>
-              <h1 className="mt-5 text-4xl font-semibold leading-[1.1] md:text-6xl">
-                Everything a student needs, in one calm place.
+        <section className="border-y border-border bg-secondary">
+          <div className="mx-auto max-w-6xl px-5 pb-12 pt-10 md:pb-16 md:pt-16">
+            <div className="max-w-4xl">
+              <p className="text-xs font-bold uppercase tracking-widest text-accent">Learning for Class 1 to Class 12</p>
+              <h1 className="mt-5 text-4xl font-semibold leading-[1.08] sm:text-5xl md:text-7xl">
+                Learn clearly. Grow confidently.
               </h1>
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
-                Study notes, video lessons and a patient AI tutor that solves even hard maths
-                problems step by step — free for every Shanti Education student.
+              <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                Notes, video lessons and a kind AI tutor that explains difficult questions step by step, in language every student can understand.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg">
-                  <Link to="/auth" search={{ mode: "signup" }}>
-                    Create your free account
-                  </Link>
+                  <Link to="/auth" search={{ mode: "signup" }}>Start learning <ArrowRight className="size-4" /></Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                  <Link to="/auth">I already have an account</Link>
+                  <Link to="/auth">Open your account</Link>
                 </Button>
               </div>
             </div>
-            <div className="relative">
-              <img
-                src={heroImage}
-                alt="Students studying together with books and a laptop"
-                width={1600}
-                height={1008}
-                className="w-full rounded-2xl border border-border object-cover shadow-[var(--shadow-lift)]"
-              />
-            </div>
+            <img
+              src={heroImage}
+              alt="Students studying together with books and a laptop"
+              width={1600}
+              height={1008}
+              className="mt-10 aspect-[16/7] w-full rounded-lg object-cover object-center shadow-[var(--shadow-lift)]"
+            />
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-16">
-          <h2 className="text-2xl font-semibold md:text-3xl">Three ways we help you study</h2>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-16">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-accent">Your learning toolkit</p>
+              <h2 className="mt-3 text-2xl font-semibold md:text-3xl">Three simple ways to move forward</h2>
+            </div>
+            <div className="divide-y divide-border border-y border-border">
             {features.map((f) => (
-              <div key={f.title} className="surface-panel p-6">
-                <div className="flex size-11 items-center justify-center rounded-xl bg-secondary text-primary">
+              <article key={f.title} className="grid gap-4 py-6 sm:grid-cols-[auto_1fr] sm:gap-5">
+                <div className="flex size-10 items-center justify-center rounded-md bg-secondary text-primary">
                   <f.icon className="size-5" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
-              </div>
+                <div><h3 className="text-lg font-semibold">{f.title}</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p></div>
+              </article>
             ))}
+            </div>
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-5 pb-20">
-          <div className="surface-panel hero-gradient flex flex-col items-start gap-5 p-8 md:flex-row md:items-center md:justify-between md:p-12">
+          <div className="flex flex-col items-start gap-5 border-y border-border bg-secondary px-6 py-10 md:flex-row md:items-center md:justify-between md:px-10">
             <div>
               <h2 className="text-2xl font-semibold md:text-3xl">Ready to start?</h2>
               <p className="mt-2 max-w-md text-sm text-muted-foreground md:text-base">
@@ -128,7 +125,7 @@ function Landing() {
             </div>
             <Button asChild size="lg">
               <Link to="/auth" search={{ mode: "signup" }}>
-                Join Shanti Education
+                Join Shanti Education Point
               </Link>
             </Button>
           </div>
@@ -137,7 +134,7 @@ function Landing() {
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-6xl px-5 py-8 text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Shanti Education. Learning for every student.
+          © {new Date().getFullYear()} Shanti Education Point. Learning for every student.
         </div>
       </footer>
     </div>
