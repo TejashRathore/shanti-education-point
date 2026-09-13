@@ -38,16 +38,16 @@ import {
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
-      { title: "Admin dashboard — Shanti Education" },
+      { title: "Admin dashboard — Shanti Education Point" },
       {
         name: "description",
         content:
-          "Manage notes, video lessons, students, reviews and feedback for Shanti Education.",
+          "Manage notes, video lessons, students, reviews and feedback for Shanti Education Point.",
       },
-      { property: "og:title", content: "Admin dashboard — Shanti Education" },
+      { property: "og:title", content: "Admin dashboard — Shanti Education Point" },
       {
         property: "og:description",
-        content: "Manage study material, students and feedback for Shanti Education.",
+        content: "Manage study material, students and feedback for Shanti Education Point.",
       },
     ],
   }),
@@ -93,7 +93,7 @@ function AdminPage() {
         <ShieldCheck className="mx-auto size-10 text-muted-foreground" />
         <h1 className="mt-4 text-2xl font-semibold">Teachers only</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          This area is for the Shanti Education team. Ask the owner to give your account
+          This area is for the Shanti Education Point team. Ask the owner to give your account
           access.
         </p>
         <Button asChild className="mt-6">

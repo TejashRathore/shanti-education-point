@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import logo from "@/assets/shanti-logo.png";
+import logo from "@/assets/shanti-education-point-logo.png.asset.json";
 
 const searchSchema = z.object({
   mode: z.enum(["signin", "signup"]).catch("signin"),
@@ -25,16 +25,16 @@ export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Sign in — Shanti Education" },
+      { title: "Sign in — Shanti Education Point" },
       {
         name: "description",
         content:
-          "Sign in or create your free Shanti Education account to open your study library and AI tutor.",
+          "Sign in or create your free Shanti Education Point account to open your study library and AI tutor.",
       },
-      { property: "og:title", content: "Sign in — Shanti Education" },
+      { property: "og:title", content: "Sign in — Shanti Education Point" },
       {
         property: "og:description",
-        content: "Access your study library and AI tutor at Shanti Education.",
+        content: "Access your study library and AI tutor at Shanti Education Point.",
       },
     ],
   }),
@@ -107,8 +107,8 @@ function AuthPage() {
     <div className="hero-gradient flex min-h-screen items-center justify-center px-5 py-12">
       <div className="w-full max-w-md">
         <Link to="/" className="mb-6 flex items-center justify-center gap-2.5">
-          <img src={logo} alt="Shanti Education" width={44} height={44} className="size-11" />
-          <span className="font-display text-xl font-semibold">Shanti Education</span>
+          <img src={logo.url} alt="Shanti Education Point logo" width={66} height={40} className="h-11 w-auto" />
+          <span className="font-display text-xl font-semibold">Shanti Education Point</span>
         </Link>
 
         <div className="surface-panel p-7">
@@ -137,7 +137,7 @@ function AuthPage() {
               </h1>
               <p className="mt-1.5 text-sm text-muted-foreground">
                 {isSignUp
-                  ? "Free for every Shanti Education student."
+                  ? "Free for every Shanti Education Point student."
                   : "Sign in to open your library and tutor."}
               </p>
 
@@ -215,7 +215,7 @@ function AuthPage() {
               </Button>
 
               <p className="mt-6 text-center text-sm text-muted-foreground">
-                {isSignUp ? "Already have an account?" : "New to Shanti Education?"}{" "}
+                {isSignUp ? "Already have an account?" : "New to Shanti Education Point?"}{" "}
                 <button
                   type="button"
                   className="font-medium text-primary underline-offset-4 hover:underline"

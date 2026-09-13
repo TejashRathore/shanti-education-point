@@ -79,14 +79,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shanti Education — Notes, Videos & AI Tutor" },
+      { title: "Shanti Education Point — Notes, Videos & AI Tutor" },
       {
         name: "description",
         content:
-          "Study PDFs, video lessons and a 24/7 AI tutor for students of class 1 to 12 at Shanti Education.",
+          "Study PDFs, video lessons and a 24/7 AI tutor for class 1 to 12 at Shanti Education Point.",
       },
-      { name: "author", content: "Shanti Education" },
-      { property: "og:title", content: "Shanti Education — Notes, Videos & AI Tutor" },
+      { name: "author", content: "Shanti Education Point" },
+      { property: "og:title", content: "Shanti Education Point — Notes, Videos & AI Tutor" },
       {
         property: "og:description",
         content:
@@ -101,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap",
       },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],

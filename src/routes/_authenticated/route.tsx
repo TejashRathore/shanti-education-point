@@ -5,7 +5,7 @@ import { BookOpen, MessageCircleQuestion, LogOut, ShieldCheck } from "lucide-rea
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useIsAdmin } from "@/lib/use-admin";
-import logo from "@/assets/shanti-logo.png";
+import logo from "@/assets/shanti-education-point-logo.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -34,8 +34,8 @@ function AppShell() {
       <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3">
           <Link to="/library" className="flex items-center gap-2.5">
-            <img src={logo} alt="Shanti Education" width={32} height={32} className="size-8" />
-            <span className="font-display text-base font-semibold">Shanti Education</span>
+            <img src={logo.url} alt="Shanti Education Point logo" width={48} height={30} className="h-8 w-auto" />
+            <span className="hidden font-display text-base font-semibold sm:inline">Shanti Education Point</span>
           </Link>
           <nav className="flex items-center gap-1">
             <Button asChild variant="ghost" size="sm">

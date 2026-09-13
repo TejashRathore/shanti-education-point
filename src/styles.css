@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Shanti Education design system.
- * Deep teal + warm saffron on a paper-warm background.
+ * Shanti Education Point design system.
+ * Soft navy + coral on a clear, pale-blue background.
  * All colours are oklch semantic tokens. Never hardcode colours in components.
  */
 
@@ -51,46 +51,46 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --shadow-soft: 0 1px 2px oklch(0.3 0.05 195 / 6%), 0 12px 32px -12px oklch(0.3 0.05 195 / 18%);
-  --shadow-lift: 0 2px 4px oklch(0.3 0.05 195 / 8%), 0 24px 48px -20px oklch(0.3 0.05 195 / 28%);
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --shadow-soft: 0 1px 2px oklch(0.34 0.07 250 / 4%), 0 12px 32px -16px oklch(0.34 0.07 250 / 14%);
+  --shadow-lift: 0 2px 4px oklch(0.34 0.07 250 / 6%), 0 24px 48px -24px oklch(0.34 0.07 250 / 22%);
 }
 
 :root {
-  --radius: 0.875rem;
-  --background: oklch(0.985 0.008 95);
-  --foreground: oklch(0.24 0.03 200);
+  --radius: 0.625rem;
+  --background: oklch(0.982 0.006 240);
+  --foreground: oklch(0.29 0.07 250);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.24 0.03 200);
+  --card-foreground: oklch(0.29 0.07 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.24 0.03 200);
-  --primary: oklch(0.44 0.085 195);
-  --primary-foreground: oklch(0.985 0.01 95);
-  --secondary: oklch(0.945 0.022 190);
-  --secondary-foreground: oklch(0.3 0.05 200);
-  --muted: oklch(0.955 0.014 95);
-  --muted-foreground: oklch(0.52 0.025 200);
-  --accent: oklch(0.78 0.14 72);
-  --accent-foreground: oklch(0.26 0.06 60);
+  --popover-foreground: oklch(0.29 0.07 250);
+  --primary: oklch(0.34 0.09 250);
+  --primary-foreground: oklch(0.985 0.006 240);
+  --secondary: oklch(0.93 0.025 235);
+  --secondary-foreground: oklch(0.3 0.075 250);
+  --muted: oklch(0.958 0.012 235);
+  --muted-foreground: oklch(0.51 0.035 245);
+  --accent: oklch(0.67 0.18 25);
+  --accent-foreground: oklch(0.99 0.004 240);
   --destructive: oklch(0.55 0.19 27);
   --destructive-foreground: oklch(0.985 0.01 95);
-  --border: oklch(0.9 0.018 190);
-  --input: oklch(0.9 0.018 190);
-  --ring: oklch(0.44 0.085 195);
-  --chart-1: oklch(0.44 0.085 195);
-  --chart-2: oklch(0.78 0.14 72);
+  --border: oklch(0.89 0.02 235);
+  --input: oklch(0.89 0.02 235);
+  --ring: oklch(0.34 0.09 250);
+  --chart-1: oklch(0.34 0.09 250);
+  --chart-2: oklch(0.67 0.18 25);
   --chart-3: oklch(0.6 0.1 165);
   --chart-4: oklch(0.55 0.12 25);
   --chart-5: oklch(0.65 0.08 260);
-  --sidebar: oklch(0.97 0.012 190);
-  --sidebar-foreground: oklch(0.24 0.03 200);
-  --sidebar-primary: oklch(0.44 0.085 195);
-  --sidebar-primary-foreground: oklch(0.985 0.01 95);
-  --sidebar-accent: oklch(0.93 0.025 190);
-  --sidebar-accent-foreground: oklch(0.28 0.05 200);
-  --sidebar-border: oklch(0.9 0.018 190);
-  --sidebar-ring: oklch(0.44 0.085 195);
+  --sidebar: oklch(0.97 0.012 235);
+  --sidebar-foreground: oklch(0.29 0.07 250);
+  --sidebar-primary: oklch(0.34 0.09 250);
+  --sidebar-primary-foreground: oklch(0.985 0.006 240);
+  --sidebar-accent: oklch(0.93 0.025 235);
+  --sidebar-accent-foreground: oklch(0.3 0.075 250);
+  --sidebar-border: oklch(0.89 0.02 235);
+  --sidebar-ring: oklch(0.34 0.09 250);
 }
 
 .dark {
@@ -144,7 +144,7 @@
   h3,
   .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.015em;
+    letter-spacing: 0;
   }
 }
 
@@ -156,10 +156,5 @@
 }
 
 @utility hero-gradient {
-  background-image: radial-gradient(
-      120% 100% at 85% 0%,
-      oklch(0.78 0.14 72 / 22%) 0%,
-      transparent 55%
-    ),
-    radial-gradient(90% 90% at 0% 10%, oklch(0.44 0.085 195 / 18%) 0%, transparent 60%);
+  background-color: var(--color-secondary);
 }
