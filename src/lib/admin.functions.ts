@@ -27,7 +27,8 @@ export const listStudents = createServerFn({ method: "POST" })
 
     const { data: profiles } = await supabaseAdmin
       .from("profiles")
-      .select("id, full_name, class_level");
+      .select("id, full_name, class_level, approval_status");
+
     const { data: roles } = await supabaseAdmin.from("user_roles").select("user_id, role");
     const { data: progress } = await supabaseAdmin
       .from("study_progress")
@@ -47,7 +48,9 @@ export const listStudents = createServerFn({ method: "POST" })
         lastSeen: u.last_sign_in_at ?? null,
         fullName: profileMap.get(u.id)?.full_name ?? "",
         classLevel: profileMap.get(u.id)?.class_level ?? null,
+        approvalStatus: profileMap.get(u.id)?.approval_status ?? "pending",
         isAdmin: adminIds.has(u.id),
+
         opened: mine.length,
         completed: mine.filter((p) => p.status === "completed").length,
         minutes: mine.reduce((sum, p) => sum + (p.minutes_spent ?? 0), 0),
