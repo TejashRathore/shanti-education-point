@@ -179,6 +179,8 @@ export type Database = {
       }
       profiles: {
         Row: {
+          approval_status: string
+          approved_at: string | null
           class_level: number | null
           created_at: string
           full_name: string
@@ -186,6 +188,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          approval_status?: string
+          approved_at?: string | null
           class_level?: number | null
           created_at?: string
           full_name?: string
@@ -193,6 +197,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          approval_status?: string
+          approved_at?: string | null
           class_level?: number | null
           created_at?: string
           full_name?: string
@@ -241,6 +247,187 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      test_answers: {
+        Row: {
+          attempt_id: string
+          awarded_marks: number
+          created_at: string
+          id: string
+          is_correct: boolean | null
+          question_id: string
+          selected_option: number | null
+          written_text: string
+        }
+        Insert: {
+          attempt_id: string
+          awarded_marks?: number
+          created_at?: string
+          id?: string
+          is_correct?: boolean | null
+          question_id: string
+          selected_option?: number | null
+          written_text?: string
+        }
+        Update: {
+          attempt_id?: string
+          awarded_marks?: number
+          created_at?: string
+          id?: string
+          is_correct?: boolean | null
+          question_id?: string
+          selected_option?: number | null
+          written_text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_answers_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "test_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "test_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      test_attempts: {
+        Row: {
+          auto_score: number
+          fully_graded: boolean
+          id: string
+          manual_score: number
+          started_at: string
+          submitted_at: string | null
+          test_id: string
+          total_marks: number
+          user_id: string
+        }
+        Insert: {
+          auto_score?: number
+          fully_graded?: boolean
+          id?: string
+          manual_score?: number
+          started_at?: string
+          submitted_at?: string | null
+          test_id: string
+          total_marks?: number
+          user_id: string
+        }
+        Update: {
+          auto_score?: number
+          fully_graded?: boolean
+          id?: string
+          manual_score?: number
+          started_at?: string
+          submitted_at?: string | null
+          test_id?: string
+          total_marks?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_attempts_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      test_questions: {
+        Row: {
+          correct_option: number | null
+          created_at: string
+          id: string
+          kind: string
+          marks: number
+          options: Json
+          position: number
+          prompt: string
+          test_id: string
+        }
+        Insert: {
+          correct_option?: number | null
+          created_at?: string
+          id?: string
+          kind?: string
+          marks?: number
+          options?: Json
+          position?: number
+          prompt: string
+          test_id: string
+        }
+        Update: {
+          correct_option?: number | null
+          created_at?: string
+          id?: string
+          kind?: string
+          marks?: number
+          options?: Json
+          position?: number
+          prompt?: string
+          test_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_questions_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tests: {
+        Row: {
+          class_level: number
+          created_at: string
+          created_by: string | null
+          description: string
+          duration_minutes: number | null
+          ends_at: string
+          id: string
+          published: boolean
+          starts_at: string
+          subject: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          class_level: number
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          duration_minutes?: number | null
+          ends_at: string
+          id?: string
+          published?: boolean
+          starts_at: string
+          subject?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          class_level?: number
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          duration_minutes?: number | null
+          ends_at?: string
+          id?: string
+          published?: boolean
+          starts_at?: string
+          subject?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
