@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789386195593,
+      "tag": "0000_student_approval_and_tests",
+      "breakpoints": true
+    }
+  ]
+}
